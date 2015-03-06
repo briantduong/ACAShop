@@ -1,0 +1,43 @@
+{% extends 'ACAShopBundle::layout.html.twig' %}
+
+{% block title %}ACA Shop - Product Listing{% endblock %}
+
+{% block content %}
+
+    <table class="table-striped">
+
+        {% for Product in Products %}
+            <tr>
+
+                <td width="160px;">
+                    <img src="{{ Product.getImage() }}" width="150px"/>
+                </td>
+
+                <td>
+                    <h3>{{ Product.getName() }}</h3>
+                    <br/>
+                    <p>
+                        {{ Product.getDescription() }}
+                    </p>
+                </td>
+
+                <td>
+                    <h4 style="color:palevioletred; font-family: verdana, arial, sans-serif; font-size: 1.3em;">
+                        ${{ Product.getPrice()|number_format(2, '.', ',') }}
+                    </h4>
+
+                    <br/>
+
+                    <form action="/add_cart" method="post">
+                        Qty: <input type="text" name="quantity" size="3" class="form-control"  value="{{ Product.getQuantity() }}"/>
+                        <input type="hidden" name="product_id" value="{{ Product.getProductId() }}"/>
+                        <input type="submit" class="btn btn-success" value="Add to Cart"/>
+                    </form>
+
+                </td>
+
+            </tr>
+        {% endfor %}
+
+    </table>
+{% endblock %}

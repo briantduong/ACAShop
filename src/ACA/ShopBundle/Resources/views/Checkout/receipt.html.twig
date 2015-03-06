@@ -1,0 +1,52 @@
+{% extends 'ACAShopBundle::layout.html.twig' %}
+
+{% block title %}ACA Shop - Shopping Cart{% endblock %}
+
+{% block content %}
+
+    {% if OrderProducts %}
+        <h3>Thank you for your order</h3>
+        <table class="table-striped">
+            {% set orderTotal = 0 %}
+            {% for Product in OrderProducts %}
+                <tr>
+
+                    <td width="160px;">
+                        <img src="{{ Product.getImage() }}" width="150px"/>
+                    </td>
+
+                    <td>
+                        <h3>{{ Product.getName() }}</h3>
+                        <br/>
+
+                        <p>{{ Product.getDescription() }}</p>
+                    </td>
+
+                    <td>
+                        <h4 style="color:palevioletred; font-family: verdana, arial, sans-serif; font-size: 1.3em;">
+                            ${{ Product.getPrice()|number_format(2, '.', ',') }}
+                        </h4>
+                    </td>
+
+                </tr>
+
+                {% set orderTotal = orderTotal +  Product.getPrice() %}
+
+            {% endfor %}
+            <tr>
+                <td colspan="2">
+                    <span class="pull-right">
+                        <h3>Order Total:&nbsp;&nbsp;&nbsp;</h3>
+                    </span>
+                </td>
+                <td>
+                    <h3>${{ orderTotal|number_format(2, '.', ',') }}</h3>
+                </td>
+            </tr>
+
+        </table>
+    {% else %}
+        <p class="alert-danger">Invalid order, or your order has expired!</p>
+    {% endif %}
+
+{% endblock %}

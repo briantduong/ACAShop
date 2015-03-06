@@ -1,0 +1,16 @@
+services:
+    db:
+        class: ACA\ShopBundle\Shop\DBCommon
+        arguments: ["%database_host%", "%database_user%", "%database_password%", "%database_name%", "%database_port%"]
+
+    # This uses constructor dependency injection
+    factory:
+        class: ACA\ShopBundle\Shop\Factory
+        arguments: ["@db"]
+
+
+    # This will use setter DI
+    service_login:
+        class: ACA\ShopBundle\Service\LoginService
+        calls:
+            - [setDb, ["@db"]]

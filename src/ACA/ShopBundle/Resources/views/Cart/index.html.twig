@@ -1,0 +1,67 @@
+{% extends 'ACAShopBundle::layout.html.twig' %}
+
+{% block title %}ACA Shop - Shopping Cart{% endblock %}
+
+{% block content %}
+
+    {% if Products %}
+        <table class="table-striped">
+            {% set orderTotal = 0 %}
+            {% for Product in Products %}
+                <tr>
+
+                    <td width="160px;">
+                        <img src="{{ Product.getImage() }}" width="150px"/>
+                    </td>
+
+                    <td>
+                        <h3>{{ Product.getName() }}</h3>
+                        <br/>
+
+                        <p>{{ Product.getDescription() }}</p>
+                    </td>
+
+                    <td>
+                        <h4 style="color:palevioletred; font-family: verdana, arial, sans-serif; font-size: 1.3em;">
+                            ${{ Product.getPrice()|number_format(2, '.', ',') }}
+                        </h4>
+
+                        <h4>Qty: {{ Product.getQuantity() }}</h4>
+
+                        <br/>
+
+                        <form action="/remove_cart" method="post">
+                            <input type="hidden" name="product_id" value="{{ Product.getProductId() }}"/>
+                            <input type="submit" class="btn btn-danger" value="Remove"/>
+                        </form>
+
+                    </td>
+
+                </tr>
+
+                {% set orderTotal = orderTotal +  Product.getPrice() %}
+
+            {% endfor %}
+            <tr>
+                <td colspan="2">
+                    <span class="pull-right">
+                        <h3>Order Total:&nbsp;&nbsp;&nbsp;</h3>
+                    </span>
+                </td>
+                <td>
+                    <h3>${{ orderTotal|number_format(2, '.', ',') }}</h3>
+                </td>
+            </tr>
+
+        </table>
+        <div class="pull-right">
+            <span>
+                <button class="btn btn-primary" id="btn-continue-shopping">Continue Shopping</button>
+                <button class="btn btn-primary" id="btn-checkout">Checkout</button>
+            </span>
+        </div>
+    {% else %}
+        <p class="alert-danger">Please add some products to your cart</p>
+    {% endif %}
+
+{% endblock %}
