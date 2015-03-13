@@ -22,11 +22,20 @@
                     </td>
 
                     <td>
-                        <h4 style="color:palevioletred; font-family: verdana, arial, sans-serif; font-size: 1.3em;">
+                        <h4 style="color:palevioletred; font-family: verdana, arial, sans-serif; font-size: 1.2em;">
                             ${{ Product.getPrice()|number_format(2, '.', ',') }}
                         </h4>
 
-                        <h4>Qty: {{ Product.getQuantity() }}</h4>
+                        {#<h4>Qty: {{ Product.getQuantity() }}</h4>#}
+
+                        <form action="/update_cart" method="post">
+                            <h4>Qty: </h4>
+                            <input type="text" name="quantity" size="3" class="form-control" value="{{ Product.getQuantity() }}" />
+                            <input type="hidden" name="product_id" value="{{ Product.getProductId() }}" />
+                            <input type="submit" value="Update" />
+                        </form>
+
+
 
                         <br/>
 
@@ -39,7 +48,7 @@
 
                 </tr>
 
-                {% set orderTotal = orderTotal +  Product.getPrice() %}
+                {% set orderTotal = orderTotal + Product.getPrice() %}
 
             {% endfor %}
             <tr>
@@ -55,13 +64,14 @@
 
         </table>
         <div class="pull-right">
+            <br/>
             <span>
                 <button class="btn btn-primary" id="btn-continue-shopping">Continue Shopping</button>
-                <button class="btn btn-primary" id="btn-checkout">Checkout</button>
+                <button class="btn btn-success" id="btn-checkout">Proceed to Checkout</button>
             </span>
         </div>
     {% else %}
-        <p class="alert-danger">Please add some products to your cart</p>
+        <p class="alert-danger">Your cart is empty!</p>
     {% endif %}
 
 {% endblock %}

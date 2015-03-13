@@ -59,8 +59,15 @@ class Factory
     {
         /** @var Product[] $Products */
         $Products = [];
+        $temp = array();
 
-        $query = 'select product_id from aca_product where product_id in(' . implode(',', $productIds) . ')';
+        foreach ($productIds as $cartItem)
+        {
+            $temp[] = $cartItem['productId'];
+        }
+
+
+        $query = 'select product_id from aca_product where product_id in(' . implode(',', $temp) . ')';
 
         $this->db->setQuery($query);
 

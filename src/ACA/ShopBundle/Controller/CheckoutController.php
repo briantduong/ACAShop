@@ -9,6 +9,7 @@ use ACA\ShopBundle\Shop\Product;
 use ACA\ShopBundle\Shop\OrderComplete;
 
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -63,7 +64,46 @@ class CheckoutController extends Controller
             $this->Session->set('order_id', $Order->getOrderId());
         }
 
-        return $this->redirect('/receipt');
+        return $this->redirect('/billing');
+    }
+
+    public function billingAction()
+    {
+        return $this->render('ACAShopBundle:Checkout:billinginfo.html.twig');
+    }
+
+    public function billingInfoAction(Request $request)
+    {
+
+        $firstName = $request->get('firstName');
+        $lastName = $request->get('lastName');
+        $phone = $request->get('phone');
+
+        $shipAddress = $request->get('shipAddress');
+        $shipCity = $request->get('shipCity');
+        $shipState = $request->get('shipState');
+
+        if ($request->get('sameAddress') == 'no')
+        {
+            $billAddress = $request->get('billAddress');
+            $billCity = $request->get('billCity');
+            $billState = $request->get('billState');
+        } else
+        {
+            $billAddress = $request->get('shipAddress');
+            $billCity = $request->get('shipCity');
+            $billState = $request->get('shipState');
+        }
+
+        $paymentInfo = $request->get('paymentInfo');
+
+        pre($firstName, '$firstName');
+        pre($lastName, '$lastName');
+        pre($phone, '$phone');
+        pre($shipAddress, '$shipAddress');
+
+//        return $this->redirect('/receipt');
+
     }
 
     /**

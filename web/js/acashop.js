@@ -9,4 +9,15 @@ $(document).ready(function(){
     $("#btn-checkout").click(function(){
         window.location.href = '/process_order';
     });
+
+    // bind to the cart button
+    $("#btn-cart").click(function(){
+        window.location.href = '/cart';
+    });
+
+    // bind to the cart button
+    $("#btn-process-action").click(function(){
+        $("#shipping-form").submit();
+    });
+
 });

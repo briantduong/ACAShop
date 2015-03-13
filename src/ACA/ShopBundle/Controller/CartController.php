@@ -110,17 +110,46 @@ class CartController extends Controller
         /** @var Session $session */
         $session = $this->get('session');
 
+        // product id from the button of the item clicked to be removed
         $productId = $_POST['product_id'];
         $cartItems = $session->get('cart_items');
 
-        foreach ($cartItems as $k => $v) {
-            if ($v == $productId) {
-                unset($cartItems[$k]);
+
+        pre($cartItems, 'cartItems');
+
+        foreach ($cartItems as $key => $value) {
+            if ($value['productId'] == $productId) {
+                unset($cartItems[$key]);
+            }
+        }
+
+
+        $session->set('cart_items', $cartItems);
+
+        return $this->redirect('/cart');
+    }
+
+
+    public function updateAction()
+    {
+
+        $session = $this->get('session');
+        $cartItems = $session->get('cart_items');
+
+        $productId = $_POST['product_id'];
+        $updateQuantity = $_POST['quantity'];
+
+        foreach ($cartItems as &$item) {
+            if ($item['productId'] == $productId) {
+                $item['quantity'] = $updateQuantity;
             }
         }
 
         $session->set('cart_items', $cartItems);
 
         return $this->redirect('/cart');
+
     }
+
+
 }
