@@ -26,8 +26,6 @@
                             ${{ Product.getPrice()|number_format(2, '.', ',') }}
                         </h4>
 
-                        {#<h4>Qty: {{ Product.getQuantity() }}</h4>#}
-
                         <form action="/update_cart" method="post">
                             <h4>Qty: </h4>
                             <input type="text" name="quantity" size="3" class="form-control" value="{{ Product.getQuantity() }}" />

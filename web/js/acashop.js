@@ -5,7 +5,7 @@ $(document).ready(function(){
        window.location.href = '/products';
     });
 
-    // bind to the checkout button
+    // bind to the proceed to checkout button
     $("#btn-checkout").click(function(){
         window.location.href = '/process_order';
     });
@@ -15,7 +15,7 @@ $(document).ready(function(){
         window.location.href = '/cart';
     });
 
-    // bind to the cart button
+    // bind to the check out button
     $("#btn-process-action").click(function(){
         $("#shipping-form").submit();
     });

@@ -7,7 +7,6 @@ use ACA\ShopBundle\Shop\DBCommon;
 use ACA\ShopBundle\Shop\Factory;
 use ACA\ShopBundle\Shop\Product;
 use ACA\ShopBundle\Shop\OrderComplete;
-
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Session\Session;
@@ -69,40 +68,62 @@ class CheckoutController extends Controller
 
     public function billingAction()
     {
-        return $this->render('ACAShopBundle:Checkout:billinginfo.html.twig');
+
+        /** @var DBCommon $db */
+        $db = $this->get('db');
+
+        $session = $this->get('session');
+        $userId = $session->get('user_id');
+
+        $query = '
+        SELECT u.name, u.email, aa.*
+        FROM aca_user u
+        INNER JOIN aca_address aa ON (aa.address_id = u.billing_address_id)
+        WHERE u.user_id = "' . $userId . '"
+        ';
+
+        $db->setQuery($query);
+        $billingAddressRow = $db->loadObject();
+
+        return $this->render('ACAShopBundle:Checkout:billinginfo.html.twig',
+            array(
+                'billing' => $billingAddressRow
+            )
+        );
+
+
     }
 
     public function billingInfoAction(Request $request)
     {
 
-        $firstName = $request->get('firstName');
-        $lastName = $request->get('lastName');
-        $phone = $request->get('phone');
+        // if user address = NULL in DB, then create a new record in DB with info provided in billing info form
+
+        $name = $request->get('name');
+        $email = $request->get('email');
 
         $shipAddress = $request->get('shipAddress');
         $shipCity = $request->get('shipCity');
         $shipState = $request->get('shipState');
+        $shipZip = $request->get('shipZip');
 
         if ($request->get('sameAddress') == 'no')
         {
             $billAddress = $request->get('billAddress');
             $billCity = $request->get('billCity');
             $billState = $request->get('billState');
+            $billZip = $request->get('billZip');
         } else
         {
             $billAddress = $request->get('shipAddress');
             $billCity = $request->get('shipCity');
             $billState = $request->get('shipState');
+            $billZip = $request->get('shipZip');
         }
 
         $paymentInfo = $request->get('paymentInfo');
 
-        pre($firstName, '$firstName');
-        pre($lastName, '$lastName');
-        pre($phone, '$phone');
-        pre($shipAddress, '$shipAddress');
-
-//        return $this->redirect('/receipt');
+        return $this->redirect('/receipt');
 
     }
 

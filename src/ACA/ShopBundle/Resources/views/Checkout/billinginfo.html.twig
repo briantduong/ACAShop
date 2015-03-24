@@ -10,16 +10,18 @@
 
         <h4>Contact</h4>
         <br/>
-        <input type="text" name="firstName" size="5" class="form-control" placeholder="First Name" />
-        <input type="text" name="lastName" size="5" class="form-control" placeholder="Last Name" />
-        <input type="text" name="phone" size="10" class="form-control" placeholder="(xxx) xxx-xxxx" />
+        <div class="row">
+            <div class="col-md-6"><input type="text" name="name" size="5" class="form-control" value="{% if billing %}{{ billing.name }}{% endif %}" placeholder="First Name" /></div>
+            <div class="col-md-6"><input type="text" name="email" size="5" class="form-control" value="{% if billing %}{{ billing.email }}{% endif %}" placeholder="user@domain.com" /></div>
+        </div>
         <br/>
 
         <h4>Shipping Address</h4>
         <br/>
-        <input type="text" name="shipAddress" size="5" class="form-control" placeholder="Address" />
-        <input type="text" name="shipCity" size="5" class="form-control" placeholder="City" />
-        <input type="text" name="shipState" size="5" class="form-control" placeholder="State" />
+        <input type="text" name="shipAddress" size="5" class="form-control" value="{% if billing %}{{ billing.street }}{% endif %}" placeholder="Address" /><br/>
+        <input type="text" name="shipCity" size="5" class="form-control" value="{% if billing %}{{ billing.city }}{% endif %}" placeholder="City" /><br/>
+        <input type="text" name="shipState" size="5" class="form-control" value="{% if billing %}{{ billing.state}}{% endif %}" placeholder="State" /><br/>
+        <input type="text" name="shipZip" size="5" class="form-control" value="{% if billing %}{{ billing.zip }}{% endif %}" placeholder="Zip Code" /><br/>
 
         <h4>Billing Address</h4>
         <input type="checkbox" name="sameAddress" checked="yes" /> Same as Shipping Address
@@ -27,16 +29,16 @@
         <input type="text" name="billAddress" size="5" class="form-control" placeholder="Address" />
         <input type="text" name="billCity" size="5" class="form-control" placeholder="City" />
         <input type="text" name="billState" size="5" class="form-control" placeholder="State" />
+        <input type="text" name="billZip" size="5" class="form-control" placeholder="Zip Code" />
 
         <h4>Payment Information</h4>
         <input type="text" name="paymentInfo" size="5" class="form-control" placeholder="Payment Info" />
 
         <br/>
-
+        <!-- Buttons -->
         <div class="pull-right">
             <button class="btn btn-primary" id="btn-cart">Back to Cart</button>
             <button class="btn btn-success" id="btn-process-action">Checkout</button>
-
         </div>
 
     </form>
