@@ -18,7 +18,7 @@ class AppKernel extends Kernel
             new ACA\ShopBundle\ACAShopBundle(),
         );
 
-        if (in_array($this->getEnvironment(), array('dev', 'test'))) {
+        if (in_array($this->getEnvironment(), array('dev', 'test.php'))) {
             $bundles[] = new Symfony\Bundle\WebProfilerBundle\WebProfilerBundle();
             $bundles[] = new Sensio\Bundle\DistributionBundle\SensioDistributionBundle();
             $bundles[] = new Sensio\Bundle\GeneratorBundle\SensioGeneratorBundle();
@@ -42,7 +42,7 @@ class AppKernel extends Kernel
             return '/tmp/cache';
         }
 
-        if (in_array($this->environment, array('dev', 'test'))) {
+        if (in_array($this->environment, array('dev', 'test.php'))) {
             return '/dev/shm/cache/' .  $this->environment;
         }
 
@@ -59,7 +59,7 @@ class AppKernel extends Kernel
             return '/tmp/logs';
         }
 
-        if (in_array($this->environment, array('dev', 'test'))) {
+        if (in_array($this->environment, array('dev', 'test.php'))) {
             return '/dev/shm/logs';
         }
 

@@ -78,6 +78,16 @@ class CheckoutController extends Controller
         $query = '
         SELECT u.name, u.email, aa.*
         FROM aca_user u
+        INNER JOIN aca_address aa ON (aa.address_id = u.shipping_address_id)
+        WHERE u.user_id = "' . $userId . '"
+        ';
+
+        $db->setQuery($query);
+        $shippingAddressRow = $db->loadObject();
+
+        $query = '
+        SELECT u.name, u.email, aa.*
+        FROM aca_user u
         INNER JOIN aca_address aa ON (aa.address_id = u.billing_address_id)
         WHERE u.user_id = "' . $userId . '"
         ';
@@ -87,6 +97,7 @@ class CheckoutController extends Controller
 
         return $this->render('ACAShopBundle:Checkout:billinginfo.html.twig',
             array(
+                'shipping' => $shippingAddressRow,
                 'billing' => $billingAddressRow
             )
         );
@@ -97,7 +108,36 @@ class CheckoutController extends Controller
     public function billingInfoAction(Request $request)
     {
 
-        // if user address = NULL in DB, then create a new record in DB with info provided in billing info form
+        // Checking (possibly) existing info from DB
+
+        /** @var DBCommon $db */
+        $db = $this->get('db');
+
+        $session = $this->get('session');
+        $userId = $session->get('user_id');
+
+        $query = '
+        SELECT u.name, u.email, aa.*
+        FROM aca_user u
+        INNER JOIN aca_address aa ON (aa.address_id = u.shipping_address_id)
+        WHERE u.user_id = "' . $userId . '"
+        ';
+
+        $db->setQuery($query);
+        $shippingAddressRow = $db->loadObject();
+
+        $query = '
+        SELECT u.name, u.email, aa.*
+        FROM aca_user u
+        INNER JOIN aca_address aa ON (aa.address_id = u.billing_address_id)
+        WHERE u.user_id = "' . $userId . '"
+        ';
+
+        $db->setQuery($query);
+        $billingAddressRow = $db->loadObject();
+
+
+        // Reading posted info from billing form
 
         $name = $request->get('name');
         $email = $request->get('email');
@@ -107,14 +147,25 @@ class CheckoutController extends Controller
         $shipState = $request->get('shipState');
         $shipZip = $request->get('shipZip');
 
-        if ($request->get('sameAddress') == 'no')
-        {
+
+        $addressInfo = ['street'=>$shipAddress, 'city'=>$shipCity, 'state'=>$shipState, 'zip'=>$shipZip];
+        $addressKeys = array_keys($addressInfo);
+        $addressValues = array_values($addressInfo);
+
+//        if (empty($shippingAddressRow)) {
+//            $query = 'INSERT INTO aca_address(street, city, state, zip) VALUES ("' . implode('", "', $addressValues) . '")';
+//        } else {
+//            $query = 'UPDATE aca_address SET (street, city, state, zip) VALUES ("' . implode('", "', $addressValues) . '")';
+//        }
+
+
+
+        if ($request->get('sameAddress') == 'no') {
             $billAddress = $request->get('billAddress');
             $billCity = $request->get('billCity');
             $billState = $request->get('billState');
             $billZip = $request->get('billZip');
-        } else
-        {
+        } else {
             $billAddress = $request->get('shipAddress');
             $billCity = $request->get('shipCity');
             $billState = $request->get('shipState');
